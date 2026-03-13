@@ -20,6 +20,9 @@
               <RouterLink to="/" class="nav-link active">Home</RouterLink>
             </li>
             <li class="nav-item">
+              <RouterLink to="/movies" class="nav-link">Movies</RouterLink>
+            </li>
+            <li class="nav-item">
               <router-link to="/movies/create" class="nav-link"
                 >Add Movie</router-link
               >
