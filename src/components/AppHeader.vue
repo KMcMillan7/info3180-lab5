@@ -20,6 +20,11 @@
               <RouterLink to="/" class="nav-link active">Home</RouterLink>
             </li>
             <li class="nav-item">
+              <router-link to="/movies/create" class="nav-link"
+                >Add Movie</router-link
+              >
+            </li>
+            <li class="nav-item">
               <RouterLink class="nav-link" to="/about">About</RouterLink>
             </li>
           </ul>
@@ -34,5 +39,14 @@ import { RouterLink } from "vue-router";
 </script>
 
 <style>
+.nav-link {
+  color: #fbfbfb;
+  margin: 0 10px;
+  text-decoration: none;
+}
+.nav-link:hover {
+  color: #fafafa;
+  text-decoration: none;
+}
 /* Add any component specific styles here */
 </style>

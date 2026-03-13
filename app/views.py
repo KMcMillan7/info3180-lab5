@@ -12,6 +12,7 @@ from werkzeug.utils import secure_filename
 from .forms import MovieForm
 from .models import Movie, db
 from flask_wtf.csrf import generate_csrf
+from flask import send_from_directory
 
 bp = Blueprint('app', __name__, url_prefix='/api/v1')
 
@@ -25,7 +26,7 @@ def index():
     return jsonify(message="This is the beginning of our API")
 
 
-bp.route('/movies', methods=['POST'])
+@bp.route('/movies', methods=['POST'])
 def movies():
     form = MovieForm()
     if form.validate_on_submit():
@@ -36,7 +37,7 @@ def movies():
         file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
 
         #Save move to database
-        movie = Movie(title=form.title.data, decription=form.decription.data, poster=filename)
+        movie = Movie(title=form.title.data, description=form.description.data, poster=filename)
         db.session.add(movie)
         db.session.commit()
 
@@ -47,10 +48,26 @@ def movies():
     else:
         return jsonify({'errors': form_errors(form)}), 400
     
+@bp.route('/movies', methods=['GET'])
+def get_movies():
+    movies = Movie.query.order_by(Movie.created_at.desc()).all()
+    movies_list = []
+    for movie in movies:
+        movies_list.append({
+            'id': movie.id,
+            'title': movie.title,
+            'description': movie.description,
+            'poster': f'/api/v1/posters/{movie.poster}'
+        })
+    return jsonify({'movies': movies_list})
 
 @bp.route('/csrf-token', methods=['GET'])
 def get_csrf_token():
     return jsonify({'csrf_token': generate_csrf()})
+
+@bp.route('/posters/<filename>')
+def get_poster(filename):
+    return send_from_directory(current_app.config['UPLOAD_FOLDER'], filename)
 
 
 ###

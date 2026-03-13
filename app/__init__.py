@@ -12,6 +12,7 @@ def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY']= '4D9E2B1A8C73F056'
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://lab5_user:password@localhost/lab5'
+    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'uploads')
 
     db.init_app(app)
     migrate.init_app(app, db)
